@@ -11,7 +11,7 @@ namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Services.BasketServiceTes
 public class AddItemToBasket
 {
     private readonly string _buyerId = "Test buyerId";
-    private readonly Mock<IRepository<Basket>> _mockBasketRepo = new();
+    private readonly Mock<IBasketRepository> _mockBasketRepo = new();
     private readonly Mock<IAppLogger<BasketService>> _mockLogger = new();
 
     [Fact]

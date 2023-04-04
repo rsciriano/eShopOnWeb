@@ -39,4 +39,9 @@ public class Basket : BaseEntity, IAggregateRoot
     {
         BuyerId = buyerId;
     }
+
+    public void SetNewId(int id)
+    {
+        Id = id;
+    }
 }

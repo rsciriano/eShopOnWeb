@@ -16,6 +16,7 @@ public static class ConfigureCoreServices
     {
         services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+        services.AddScoped<IBasketRepository, BasketInMemoryRepository>();
 
         services.AddScoped<IInventoryService, InventoryService>();
 

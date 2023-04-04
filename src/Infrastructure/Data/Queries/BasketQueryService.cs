@@ -7,11 +7,11 @@ namespace Microsoft.eShopWeb.Infrastructure.Data.Queries;
 
 public class BasketQueryService : IBasketQueryService
 {
-    private readonly CatalogContext _dbContext;
+    private readonly IBasketRepository _basketRepository;
 
-    public BasketQueryService(CatalogContext dbContext)
+    public BasketQueryService(IBasketRepository basketRepository)
     {
-        _dbContext = dbContext;
+        _basketRepository = basketRepository;
     }
 
     /// <summary>
@@ -21,11 +21,6 @@ public class BasketQueryService : IBasketQueryService
     /// <returns></returns>
     public async Task<int> CountTotalBasketItems(string username)
     {
-        var totalItems = await _dbContext.Baskets
-            .Where(basket => basket.BuyerId == username)
-            .SelectMany(item => item.Items)
-            .SumAsync(sum => sum.Quantity);
-
-        return totalItems;
+        return _basketRepository.GetTotalBasketItems(username);
     }
 }

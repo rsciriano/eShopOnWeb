@@ -10,10 +10,10 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services;
 
 public class BasketService : IBasketService
 {
-    private readonly IRepository<Basket> _basketRepository;
+    private readonly IBasketRepository _basketRepository;
     private readonly IAppLogger<BasketService> _logger;
 
-    public BasketService(IRepository<Basket> basketRepository,
+    public BasketService(IBasketRepository basketRepository,
         IAppLogger<BasketService> logger)
     {
         _basketRepository = basketRepository;

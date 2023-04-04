@@ -39,5 +39,6 @@ public static class Dependencies
 
             services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
         }
+
     }
 }
