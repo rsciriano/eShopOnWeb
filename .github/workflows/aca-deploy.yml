@@ -10,6 +10,8 @@ on:
     - '**'
     - '.github/workflows/aca-deploy.yml'
 
+  pull_request:
+  
   # Allow mannually trigger 
   workflow_dispatch:      
 
