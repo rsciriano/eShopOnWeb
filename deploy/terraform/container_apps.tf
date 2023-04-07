@@ -80,7 +80,7 @@ module "container_apps" {
                 secret_name = "identity-connection"
             },
             {
-                name        = "ConnectionStrings__ServiceBus"
+                name        = "ConnectionStrings__ServiceBusConnection"
                 secret_name = "servicebus-connection"
             },
             {
