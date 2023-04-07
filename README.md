@@ -31,3 +31,7 @@ from (
 FULL OUTER JOIN dbo.CatalogStock as qStock ON qStock.Id = qOrdered.CatalogItemId
 where qOrdered.CatalogItemId is NULL or qStock.Id is NULL or qOrdered.OrderedQuantity <> qStock.ReservedQuantity
 ```
+
+## Azure functions (isolated)
+
+- [adding AI project by brettsam · Pull Request #944 · Azure/azure-functions-dotnet-worker](https://github.com/Azure/azure-functions-dotnet-worker/pull/944)

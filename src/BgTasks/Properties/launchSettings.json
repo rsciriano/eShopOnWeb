@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "BgTasks": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7002"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 33367,
+      "useSSL": false
+    }
+  }
+}

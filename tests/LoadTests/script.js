@@ -15,8 +15,8 @@ export const options = {
           executor: 'ramping-vus',
           startVUs: 1,
           stages: [
-            { duration: '1m', target: 37 },
-            { duration: '10m', target: 37 },
+            { duration: '1m', target: 25 },
+            { duration: '10m', target: 25 },
           ],
           gracefulRampDown: '0s',
         },
@@ -29,7 +29,7 @@ export function setup() {
   
 export default function (data) {
 // 3. VU code
-const baseUrl = 'https://eshop-web.lemondune-34487a48.westeurope.azurecontainerapps.io'
+const baseUrl = 'https://eshop-web.yellowstone-459f3d9b.westeurope.azurecontainerapps.io'
 const userId = uuidv4();
 //const auth = generateJwt(userId);
 const auth = `LoadTests ${userId}`;
