@@ -34,4 +34,10 @@ where qOrdered.CatalogItemId is NULL or qStock.Id is NULL or qOrdered.OrderedQua
 
 ## Azure functions (isolated)
 
-- [adding AI project by brettsam · Pull Request #944 · Azure/azure-functions-dotnet-worker](https://github.com/Azure/azure-functions-dotnet-worker/pull/944)
+- [Guide for running C# Azure Functions in an isolated worker process | Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide#dependency-injection)
+- [adding AI project by brettsam ï¿½ Pull Request #944 ï¿½ Azure/azure-functions-dotnet-worker](https://github.com/Azure/azure-functions-dotnet-worker/pull/944)
+
+
+## ServiceBus send messages quota exceeded
+
+[Sending Messages at Scale - Cannot allocate more handles | The Long Walk](https://pmichaels.net/2022/09/25/sending-messages-at-scale-cannot-allocate-more-handles/)
