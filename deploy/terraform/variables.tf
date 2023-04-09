@@ -3,6 +3,12 @@ variable "resource_prefix" {
   type        = string
 }
 
+variable "environment" {
+  description = "Environment name"
+  type        = string
+  default     = "demo"
+}
+
 variable "app_image" {
   description = "App Containner image"
   type        = string
@@ -187,4 +193,16 @@ variable "container_access_type" {
   description = "Specifies the access type of the container in the storage account."
   type        = string
   default     = "private"
+}
+
+variable "function_app_publish_dir" {
+  description = "Path where the funtion app publish files are"
+}
+
+variable "function_app_package_dir" {
+  description = "Path where the funtion app packege will be generated"
+}
+
+variable "function_app_version" {
+  description = "Funtion app version"
 }

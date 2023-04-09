@@ -32,6 +32,7 @@
     <PackageVersion Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageVersion Include="Microsoft.Azure.Functions.Worker" Version="1.10.0" />
     <PackageVersion Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.0.0-preview4" />
+    <PackageVersion Include="Microsoft.Azure.Functions.Worker.Extensions.ApplicationInsights" Version="1.0.0-preview4" />
     <PackageVersion Include="Microsoft.Azure.Functions.Worker.Extensions.ServiceBus" Version="5.7.0" />
     <PackageVersion Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.7.0" />
     <PackageVersion Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.9.0" />
