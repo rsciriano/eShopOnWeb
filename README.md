@@ -41,3 +41,5 @@ where qOrdered.CatalogItemId is NULL or qStock.Id is NULL or qOrdered.OrderedQua
 ## ServiceBus send messages quota exceeded
 
 [Sending Messages at Scale - Cannot allocate more handles | The Long Walk](https://pmichaels.net/2022/09/25/sending-messages-at-scale-cannot-allocate-more-handles/)
+
+[Best practices for improving performance using Azure Service Bus - Azure Service Bus | Microsoft Learn](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-performance-improvements?tabs=net-standard-sdk-2)
