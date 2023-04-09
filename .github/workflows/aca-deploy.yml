@@ -154,6 +154,11 @@ jobs:
       with:
         name: tfplan
         path: deploy/terraform/tfplan
+    - name: Publish FunctionsApp package
+      uses: actions/upload-artifact@v3
+      with:
+        name: functions_app_package
+        path: deploy/functions_app/*.zip
         
     # Create string output of Terraform Plan
     - name: Create String Output
@@ -210,11 +215,11 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
-    - name: Download FunctionsApp publish files
+    - name: Download FunctionsApp package
       uses: actions/download-artifact@v3
       with:
-        name: functions_app
-        path: deploy/functions_app/publish
+        name: functions_app_package
+        path: deploy/functions_app
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
