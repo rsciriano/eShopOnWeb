@@ -48,7 +48,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push container image to registry
+      - name: Build and push webapp container image to registry
         uses: docker/build-push-action@v2
         with:
           push: true
@@ -60,9 +60,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
-      - name: Build Function App
-        run: dotnet publish "src/BgTasks.csproj" -c Release -o deploy/functions_app/publish
-      - name: Publish Functions App package
+      - name: Build FunctionsApp
+        run: dotnet publish "src/BgTasks/BgTasks.csproj" -c Release -o deploy/functions_app/publish
+      - name: Publish FunctionsApp files
         uses: actions/upload-artifact@v3
         with:
           name: functions_app
