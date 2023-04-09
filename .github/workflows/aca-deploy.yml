@@ -85,7 +85,7 @@ jobs:
     steps:
     - name: Checkout to the branch
       uses: actions/checkout@v2   
-    - name: Download Functions App publish files
+    - name: Download FunctionsApp publish files
       uses: actions/download-artifact@v3
       with:
         name: functions_app
@@ -107,8 +107,8 @@ jobs:
         tee -a terraform.tfvars <<EOF
         resource_prefix = "eshopdemo"
         app_image = "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
-        function_app_publish_dir = "deploy/functions_app/publish"
-        function_app_package_dir = "build/functions_app"
+        function_app_publish_dir = "../functions_app/publish"
+        function_app_package_dir = "../functions_app"
         function_app_version = "${{ github.sha }}"
         EOF
     - name: Terraform state
@@ -210,6 +210,11 @@ jobs:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
+    - name: Download FunctionsApp publish files
+      uses: actions/download-artifact@v3
+      with:
+        name: functions_app
+        path: deploy/functions_app/publish
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
