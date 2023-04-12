@@ -36,6 +36,8 @@ where qOrdered.CatalogItemId is NULL or qStock.Id is NULL or qOrdered.OrderedQua
 
 - [Guide for running C# Azure Functions in an isolated worker process | Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-functions/dotnet-isolated-process-guide#dependency-injection)
 - [adding AI project by brettsam � Pull Request #944 � Azure/azure-functions-dotnet-worker](https://github.com/Azure/azure-functions-dotnet-worker/pull/944)
+- [Azure Service Bus bindings for Azure Functions | Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-service-bus?tabs=in-process%2Cextensionv5%2Cextensionv3&pivots=programming-language-csharp#hostjson-settings)
+- [Azure SQL input binding for Functions | Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-azure-sql-input?tabs=in-process&pivots=programming-language-csharp)
 
 
 ## ServiceBus send messages quota exceeded

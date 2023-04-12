@@ -22,17 +22,17 @@ public class InventoryService: IInventoryService
         
         using var command = connection.CreateCommand();
         command.CommandText = @"
-MERGE dbo.CatalogStock as tgt
-USING (
-    SELECT ItemOrdered_CatalogItemId AS CatalogItemId, Units 
-    from dbo.OrderItems 
-    where [OrderId] = @OrderId
-) as src (CatalogItemId, Units)
-ON tgt.Id = src.CatalogItemId
-WHEN MATCHED THEN  
-    UPDATE SET ReservedQuantity = ReservedQuantity + src.Units
-WHEN NOT MATCHED BY TARGET THEN  
-    INSERT (Id, StockQuantity, ReservedQuantity) VALUES (src.CatalogItemId, 0, src.Units);";
+            MERGE dbo.CatalogStock as tgt
+            USING (
+                SELECT ItemOrdered_CatalogItemId AS CatalogItemId, Units 
+                from dbo.OrderItems 
+                where [OrderId] = @OrderId
+            ) as src (CatalogItemId, Units)
+            ON tgt.Id = src.CatalogItemId
+            WHEN MATCHED THEN  
+                UPDATE SET ReservedQuantity = ReservedQuantity + src.Units
+            WHEN NOT MATCHED BY TARGET THEN  
+                INSERT (Id, StockQuantity, ReservedQuantity) VALUES (src.CatalogItemId, 0, src.Units);";
 
         var orderIdParam = command.CreateParameter();
         orderIdParam.ParameterName = "@OrderId";

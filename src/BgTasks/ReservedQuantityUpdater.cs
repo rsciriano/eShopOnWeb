@@ -20,8 +20,7 @@ public class ReservedQuantityUpdater
 
     [Function("ReservedQuantityUpdater")]
     public Task Run(
-        [ServiceBusTrigger("order-payment-succeeded", "ReservedQuantityUpdater", 
-            Connection = "ServiceBusConnection")] 
+        [ServiceBusTrigger("order-payment-succeeded", "ReservedQuantityUpdater", Connection = "ServiceBusConnection")] 
         OrderPaymentSucceeded @event)
     {
         return _inventoryService.UpdateOrderReservedQuantity(@event.OrderId);

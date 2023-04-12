@@ -43,7 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorShared", "src\BlazorS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicApiIntegrationTests", "tests\PublicApiIntegrationTests\PublicApiIntegrationTests.csproj", "{D53EF010-8F8C-4337-A059-456E19D8AE63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BgTasks", "src\BgTasks\BgTasks.csproj", "{3FA4E529-692A-46A8-8A8B-9FA3B8787788}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BgTasks", "src\BgTasks\BgTasks.csproj", "{3FA4E529-692A-46A8-8A8B-9FA3B8787788}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BgTasks2", "src\BgTasks2\BgTasks2.csproj", "{B08E23A3-6635-4188-9BE0-7A423DD509DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{3FA4E529-692A-46A8-8A8B-9FA3B8787788}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FA4E529-692A-46A8-8A8B-9FA3B8787788}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FA4E529-692A-46A8-8A8B-9FA3B8787788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B08E23A3-6635-4188-9BE0-7A423DD509DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B08E23A3-6635-4188-9BE0-7A423DD509DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B08E23A3-6635-4188-9BE0-7A423DD509DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B08E23A3-6635-4188-9BE0-7A423DD509DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +121,7 @@ Global
 		{715CF7AF-A1EE-40A6-94A0-8DA3F3B2CAE9} = {419A6ACE-0419-4315-A6FB-B0E63D39432E}
 		{D53EF010-8F8C-4337-A059-456E19D8AE63} = {15EA4737-125B-4E6E-A806-E13B7EBCDCCF}
 		{3FA4E529-692A-46A8-8A8B-9FA3B8787788} = {419A6ACE-0419-4315-A6FB-B0E63D39432E}
+		{B08E23A3-6635-4188-9BE0-7A423DD509DE} = {419A6ACE-0419-4315-A6FB-B0E63D39432E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {49813262-5DA3-4D61-ABD3-493C74CE8C2B}
