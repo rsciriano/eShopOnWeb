@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
@@ -18,26 +19,36 @@ public class UpdateProductReservedQuantity
     }
 
     [FunctionName("UpdateProductReservedQuantity")]
-    public async Task Run(
+    public void Run(
         [ServiceBusTrigger("reserved-quantity-update-requested", Connection = "ServiceBusConnection", IsSessionsEnabled = true)]
         OrderedItem @event,
         
-        [Sql(commandText: "select [Id], [ReservedQuantity] from dbo.CatalogStock where [Id] > @OrderId",
+        [Sql(commandText: "select [Id], [ReservedQuantity] from dbo.CatalogStock where [Id] = @CatalogItemId",
                 commandType: System.Data.CommandType.Text,
-                parameters: "@OrderId={OrderId}",
+                parameters: "@CatalogItemId={CatalogItemId}",
                 connectionStringSetting: "CatalogConnection")]
         IEnumerable<CatalogStock> stockItems,
 
         [Sql("dbo.CatalogStock", connectionStringSetting: "CatalogConnection")]
-        IAsyncCollector<CatalogStock> collector
+        ICollector<CatalogStock> collector
     )
     {
-        foreach (var item in stockItems)
+        var stockEntry = stockItems.SingleOrDefault();
+        if ( stockEntry == null )
         {
-            item.ReservedQuantity += @event.Units;
-            await collector.AddAsync(item);
+            stockEntry = new CatalogStock { Id = @event.CatalogItemId };
         }
 
-        await collector.FlushAsync();
+        stockEntry.ReservedQuantity += @event.Units;
+        collector.Add(stockEntry);
+
+        _logger.LogInformation(
+            "Updated product reserved quantity from order. OrderId={OrderId} | CatalogItemId={CatalogItemId} | OrderedQuantity={OrderedQuantity} | ReservedQuantity={ReservedQuantity}",
+            @event.CatalogItemId,
+            @event.OrderId,
+            @event.Units,
+            stockEntry.ReservedQuantity
+            );
+
     }
 }

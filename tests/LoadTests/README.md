@@ -12,7 +12,7 @@ Runing tests:
 
 ```
 cd tests\LoadTests
-docker-compose up
+docker-compose up -d
 k6 run -o influxdb=http://localhost:8086/k6 script.js
 ```
 
