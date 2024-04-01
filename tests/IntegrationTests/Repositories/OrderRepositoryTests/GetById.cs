@@ -9,29 +9,39 @@ using Xunit.Abstractions;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests;
 
-public class GetById
+public class GetById : IClassFixture<DatabaseFixture>
 {
-    private readonly CatalogContext _catalogContext;
-    private readonly EfRepository<Order> _orderRepository;
+    private CatalogContext _catalogContext;
+    private EfRepository<Order> _orderRepository;
     private OrderBuilder OrderBuilder { get; } = new OrderBuilder();
     private readonly ITestOutputHelper _output;
-    public GetById(ITestOutputHelper output)
+    private readonly DatabaseFixture _fixture;
+
+    public GetById(ITestOutputHelper output, DatabaseFixture fixture)
     {
         _output = output;
-        var dbOptions = new DbContextOptionsBuilder<CatalogContext>()
-            .UseInMemoryDatabase(databaseName: "TestCatalog")
-            .Options;
-        _catalogContext = new CatalogContext(dbOptions);
+        _fixture = fixture;
+    }
+
+    private async Task InitializeDatabase(string databaseEngine)
+    {
+        _catalogContext = await _fixture.CreateDbContextAsync<CatalogContext>(databaseEngine);
         _orderRepository = new EfRepository<Order>(_catalogContext);
     }
 
-    [Fact]
-    public async Task GetsExistingOrder()
+
+    [Theory]
+    [InlineData(DatabaseEngines.InMemory)]
+    [InlineData(DatabaseEngines.SqlServer)]
+    [InlineData(DatabaseEngines.CosmosDb)]
+    public async Task GetsExistingOrder(string databaseEngine)
     {
+        await InitializeDatabase(databaseEngine);
+
         var existingOrder = OrderBuilder.WithDefaultValues();
         _catalogContext.Orders.Add(existingOrder);
         _catalogContext.SaveChanges();
-        int orderId = existingOrder.Id;
+        string orderId = existingOrder.Id;
         _output.WriteLine($"OrderId: {orderId}");
 
         var orderFromRepo = await _orderRepository.GetByIdAsync(orderId);

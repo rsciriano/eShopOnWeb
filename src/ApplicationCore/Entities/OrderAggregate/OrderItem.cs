@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
-public class OrderItem : BaseEntity
+public class OrderItem
 {
     public CatalogItemOrdered ItemOrdered { get; private set; }
     public decimal UnitPrice { get; private set; }

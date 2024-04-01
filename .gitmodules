@@ -1,0 +1,4 @@
+[submodule "ExternalDependencies/Specification"]
+	path = ExternalDependencies/Specification
+	url = https://github.com/rsciriano/Specification.git
+	branch = feature/add-async

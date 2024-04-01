@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Specifications;
 using Microsoft.eShopWeb.Infrastructure.Data;
@@ -10,25 +11,33 @@ using Xunit;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests;
 
-public class GetByIdWithItemsAsync
+public class GetByIdWithItemsAsync: IClassFixture<DatabaseFixture>
 {
-    private readonly CatalogContext _catalogContext;
-    private readonly EfRepository<Order> _orderRepository;
+    private CatalogContext _catalogContext;
+    private EfRepository<Order> _orderRepository;
+    private readonly DatabaseFixture _fixture;
+
     private OrderBuilder OrderBuilder { get; } = new OrderBuilder();
 
-    public GetByIdWithItemsAsync()
+    public GetByIdWithItemsAsync(DatabaseFixture fixture)
     {
-        var dbOptions = new DbContextOptionsBuilder<CatalogContext>()
-            .UseInMemoryDatabase(databaseName: "TestCatalog")
-            .Options;
-        _catalogContext = new CatalogContext(dbOptions);
+        _fixture = fixture;
+    }
+
+    private async Task InitializeDatabase(string databaseEngine)
+    {
+        _catalogContext = _catalogContext = await _fixture.CreateDbContextAsync<CatalogContext>(databaseEngine);
         _orderRepository = new EfRepository<Order>(_catalogContext);
     }
 
-    [Fact]
-    public async Task GetOrderAndItemsByOrderIdWhenMultipleOrdersPresent()
+    [Theory]
+    [InlineData(DatabaseEngines.InMemory)]
+    [InlineData(DatabaseEngines.CosmosDb)]
+    public async Task GetOrderAndItemsByOrderIdWhenMultipleOrdersPresent(string databaseEngine)
     {
         //Arrange
+        await InitializeDatabase(databaseEngine);
+
         var itemOneUnitPrice = 5.50m;
         var itemOneUnits = 2;
         var itemTwoUnitPrice = 7.50m;
@@ -36,14 +45,14 @@ public class GetByIdWithItemsAsync
 
         var firstOrder = OrderBuilder.WithDefaultValues();
         _catalogContext.Orders.Add(firstOrder);
-        int firstOrderId = firstOrder.Id;
+        var firstOrderId = firstOrder.Id;
 
         var secondOrderItems = new List<OrderItem>();
         secondOrderItems.Add(new OrderItem(OrderBuilder.TestCatalogItemOrdered, itemOneUnitPrice, itemOneUnits));
         secondOrderItems.Add(new OrderItem(OrderBuilder.TestCatalogItemOrdered, itemTwoUnitPrice, itemTwoUnits));
         var secondOrder = OrderBuilder.WithItems(secondOrderItems);
         _catalogContext.Orders.Add(secondOrder);
-        int secondOrderId = secondOrder.Id;
+        var secondOrderId = secondOrder.Id;
 
         _catalogContext.SaveChanges();
 

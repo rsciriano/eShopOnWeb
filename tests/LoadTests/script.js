@@ -5,6 +5,7 @@ import generateJwt from "./helpers/jwt-generator.js";
 import { Home } from "./resourceObjectModel/web/home.js";
 import { Basket } from "./resourceObjectModel/web/basket.js";
 
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
 export const options = {
     tags : {
@@ -15,8 +16,8 @@ export const options = {
           executor: 'ramping-vus',
           startVUs: 1,
           stages: [
-            { duration: '1m', target: 37 },
-            { duration: '10m', target: 37 },
+            { duration: '1m', target: 100 },
+            { duration: '10m', target: 100 },
           ],
           gracefulRampDown: '0s',
         },
@@ -29,7 +30,7 @@ export function setup() {
   
 export default function (data) {
 // 3. VU code
-const baseUrl = 'https://eshop-web.lemondune-34487a48.westeurope.azurecontainerapps.io'
+const baseUrl = 'http://localhost:5106'
 const userId = uuidv4();
 //const auth = generateJwt(userId);
 const auth = `LoadTests ${userId}`;
@@ -48,4 +49,10 @@ basket.checkout();
 
 export function teardown(data) {
 // 4. teardown code
+}
+
+export function handleSummary(data) {
+  return {
+    "summary.html": htmlReport(data),
+  };
 }

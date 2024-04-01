@@ -17,6 +17,10 @@ public static class ConfigureCoreServices
         services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
+        //services.AddScoped(typeof(IRepository<>), typeof(CosmosRepository<>));
+        //services.AddScoped(typeof(IReadRepository<>), typeof(CosmosRepository<>));
+
+
         services.AddScoped<IBasketService, BasketService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<IBasketQueryService, BasketQueryService>();

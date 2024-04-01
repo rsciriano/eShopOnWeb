@@ -5,7 +5,7 @@ using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
-public class Order : BaseEntity, IAggregateRoot
+public class Order : BaseEntity<string>, IAggregateRoot
 {
     #pragma warning disable CS8618 // Required by Entity Framework
     private Order() {}

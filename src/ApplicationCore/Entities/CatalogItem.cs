@@ -30,6 +30,11 @@ public class CatalogItem : BaseEntity, IAggregateRoot
         PictureUri = pictureUri;
     }
 
+    public CatalogItem()
+    {
+            
+    }
+
     public void UpdateDetails(CatalogItemDetails details)
     {
         Guard.Against.NullOrEmpty(details.Name, nameof(details.Name));

@@ -41,6 +41,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorShared", "src\BlazorS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublicApiIntegrationTests", "tests\PublicApiIntegrationTests\PublicApiIntegrationTests.csproj", "{D53EF010-8F8C-4337-A059-456E19D8AE63}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Data.CosmosDb", "src\Infrastructure.Data.CosmosDb\Infrastructure.Data.CosmosDb.csproj", "{6BD66C2B-CFED-42C2-8D84-5551F9FC056E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalDependencies", "ExternalDependencies", "{1A8BCC25-629A-4A12-9670-156034414471}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specification", "Specification", "{32F90F6C-95C3-4150-8FD0-A804AA846ADC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ardalis.Specification", "ExternalDependencies\Specification\Specification\src\Ardalis.Specification\Ardalis.Specification.csproj", "{24EBEB01-467D-4B53-9CB4-4990983E56B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ardalis.Specification.EntityFrameworkCore", "ExternalDependencies\Specification\Specification.EntityFrameworkCore\src\Ardalis.Specification.EntityFrameworkCore\Ardalis.Specification.EntityFrameworkCore.csproj", "{3C54874E-4D30-4625-B7C5-C3BC4412CA4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +101,18 @@ Global
 		{D53EF010-8F8C-4337-A059-456E19D8AE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D53EF010-8F8C-4337-A059-456E19D8AE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D53EF010-8F8C-4337-A059-456E19D8AE63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD66C2B-CFED-42C2-8D84-5551F9FC056E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD66C2B-CFED-42C2-8D84-5551F9FC056E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD66C2B-CFED-42C2-8D84-5551F9FC056E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD66C2B-CFED-42C2-8D84-5551F9FC056E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24EBEB01-467D-4B53-9CB4-4990983E56B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24EBEB01-467D-4B53-9CB4-4990983E56B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24EBEB01-467D-4B53-9CB4-4990983E56B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24EBEB01-467D-4B53-9CB4-4990983E56B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C54874E-4D30-4625-B7C5-C3BC4412CA4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C54874E-4D30-4625-B7C5-C3BC4412CA4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C54874E-4D30-4625-B7C5-C3BC4412CA4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C54874E-4D30-4625-B7C5-C3BC4412CA4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +128,10 @@ Global
 		{71368733-80A4-4869-B215-3A7001878577} = {419A6ACE-0419-4315-A6FB-B0E63D39432E}
 		{715CF7AF-A1EE-40A6-94A0-8DA3F3B2CAE9} = {419A6ACE-0419-4315-A6FB-B0E63D39432E}
 		{D53EF010-8F8C-4337-A059-456E19D8AE63} = {15EA4737-125B-4E6E-A806-E13B7EBCDCCF}
+		{6BD66C2B-CFED-42C2-8D84-5551F9FC056E} = {419A6ACE-0419-4315-A6FB-B0E63D39432E}
+		{32F90F6C-95C3-4150-8FD0-A804AA846ADC} = {1A8BCC25-629A-4A12-9670-156034414471}
+		{24EBEB01-467D-4B53-9CB4-4990983E56B7} = {32F90F6C-95C3-4150-8FD0-A804AA846ADC}
+		{3C54874E-4D30-4625-B7C5-C3BC4412CA4F} = {32F90F6C-95C3-4150-8FD0-A804AA846ADC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {49813262-5DA3-4D61-ABD3-493C74CE8C2B}

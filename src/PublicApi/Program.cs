@@ -6,6 +6,7 @@ using BlazorShared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.eShopWeb;
 using Microsoft.eShopWeb.ApplicationCore.Constants;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
@@ -32,14 +33,19 @@ builder.Services.AddEndpoints();
 builder.Configuration.AddConfigurationFile("appsettings.test.json");
 builder.Logging.AddConsole();
 
-Microsoft.eShopWeb.Infrastructure.Dependencies.ConfigureServices(builder.Configuration, builder.Services);
+Microsoft.eShopWeb.Infrastructure.Dependencies.ConfigureServices(
+    builder.Configuration, 
+    builder.Services, 
+    builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Docker"));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-        .AddEntityFrameworkStores<AppIdentityDbContext>()
-        .AddDefaultTokenProviders();
+builder.Services.AddIdentity(builder.Configuration);
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
+
+//builder.Services.AddScoped(typeof(IRepository<>), typeof(CosmosRepository<>));
+//builder.Services.AddScoped(typeof(IReadRepository<>), typeof(CosmosRepository<>));
+
 builder.Services.Configure<CatalogSettings>(builder.Configuration);
 var catalogSettings = builder.Configuration.Get<CatalogSettings>() ?? new CatalogSettings();
 builder.Services.AddSingleton<IUriComposer>(new UriComposer(catalogSettings));
@@ -139,8 +145,13 @@ using (var scope = app.Services.CreateScope())
 
         var userManager = scopedProvider.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var identityContext = scopedProvider.GetRequiredService<AppIdentityDbContext>();
+        IdentityDbContext<ApplicationUser, IdentityRole, string> identityContext = builder.Configuration.GetDatabaseEngine() switch
+        {
+            DatabaseEngines.CosmosDb => scopedProvider.GetRequiredService<AppIdentityCosmosDbContext>(),
+            _ => scopedProvider.GetRequiredService<AppIdentityDbContext>()
+        };
         await AppIdentityDbContextSeed.SeedAsync(identityContext, userManager, roleManager);
+
     }
     catch (Exception ex)
     {

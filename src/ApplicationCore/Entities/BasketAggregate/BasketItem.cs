@@ -2,9 +2,8 @@
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 
-public class BasketItem : BaseEntity
+public class BasketItem
 {
-
     public decimal UnitPrice { get; private set; }
     public int Quantity { get; private set; }
     public int CatalogItemId { get; private set; }

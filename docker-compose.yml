@@ -5,21 +5,43 @@ services:
     image: ${DOCKER_REGISTRY-}eshopwebmvc
     build:
       context: .
-      dockerfile: src/Web/Dockerfile
+      dockerfile: src/Web/Dockerfile    
     depends_on:
-      - "sqlserver"
+      #- "sqlserver"
+      - "cosmosdb"
+    networks:
+      - mynet
   eshoppublicapi:
     image: ${DOCKER_REGISTRY-}eshoppublicapi
     build:
       context: .
       dockerfile: src/PublicApi/Dockerfile
     depends_on:
-      - "sqlserver"
-  sqlserver:
-    image: mcr.microsoft.com/azure-sql-edge
+      #- "sqlserver"
+      - "cosmosdb"
+    networks:
+      - mynet
+  #sqlserver:
+  #  image: mcr.microsoft.com/azure-sql-edge
+  #  hostname: sqlserver
+  #  ports:
+  #    - "1433:1433"
+  #  environment:
+  #    - SA_PASSWORD=@someThingComplicated1234
+  #    - ACCEPT_EULA=Y
+  #  networks:
+  #    - mynet
+  cosmosdb:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
     ports:
-      - "1433:1433"
+      - "8081:8081"
+      - "10250-10255:10250-10255"
     environment:
-      - SA_PASSWORD=@someThingComplicated1234
-      - ACCEPT_EULA=Y
+      - AZURE_COSMOS_EMULATOR_PARTITION_COUNT=20
+      - AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE=true
+    networks:
+      - mynet
+networks:
+  mynet:
+    driver: bridge  
 

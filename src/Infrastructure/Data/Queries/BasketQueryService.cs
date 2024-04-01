@@ -21,11 +21,28 @@ public class BasketQueryService : IBasketQueryService
     /// <returns></returns>
     public async Task<int> CountTotalBasketItems(string username)
     {
-        var totalItems = await _dbContext.Baskets
-            .Where(basket => basket.BuyerId == username)
-            .SelectMany(item => item.Items)
-            .SumAsync(sum => sum.Quantity);
+        if (_dbContext.Database.IsCosmos())
+        {
+            var userBaskets = await _dbContext.Baskets
+                .Where(basket => basket.BuyerId == username)
+                .ToListAsync();
 
-        return totalItems;
+            var totalItems = userBaskets
+                .SelectMany(item => item.Items)
+                .Sum(sum => sum.Quantity);
+
+            return totalItems;
+
+        }
+        else
+        {
+            var totalItems = await _dbContext.Baskets
+                .Where(basket => basket.BuyerId == username)
+                .SelectMany(item => item.Items)
+                .SumAsync(sum => sum.Quantity);
+
+            return totalItems;
+
+        }
     }
 }

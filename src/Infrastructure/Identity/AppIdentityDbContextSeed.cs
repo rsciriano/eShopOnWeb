@@ -1,18 +1,24 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.ApplicationCore.Constants;
+using Microsoft.eShopWeb.Infrastructure.Data;
 
 namespace Microsoft.eShopWeb.Infrastructure.Identity;
 
 public class AppIdentityDbContextSeed
 {
-    public static async Task SeedAsync(AppIdentityDbContext identityDbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public static async Task SeedAsync(IdentityDbContext<ApplicationUser, IdentityRole, string> identityDbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
 
         if (identityDbContext.Database.IsSqlServer())
         {
             identityDbContext.Database.Migrate();
+        }
+        else if (identityDbContext.Database.IsCosmos())
+        {
+            await identityDbContext.Database.EnsureCreatedAsync();
         }
 
         await roleManager.CreateAsync(new IdentityRole(BlazorShared.Authorization.Constants.Roles.ADMINISTRATORS));

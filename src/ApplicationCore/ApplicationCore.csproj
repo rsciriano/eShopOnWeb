@@ -7,13 +7,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="Ardalis.GuardClauses" />
-		<PackageReference Include="Ardalis.Result" />
-		<PackageReference Include="Ardalis.Specification" />		
+		<PackageReference Include="Ardalis.Result" />		
 		<PackageReference Include="System.Security.Claims" />
 		<PackageReference Include="System.Text.Json" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\ExternalDependencies\Specification\Specification\src\Ardalis.Specification\Ardalis.Specification.csproj" />
 	  <ProjectReference Include="..\BlazorShared\BlazorShared.csproj" />
 	</ItemGroup>
 

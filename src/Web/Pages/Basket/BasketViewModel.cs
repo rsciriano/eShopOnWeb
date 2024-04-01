@@ -2,7 +2,7 @@
 
 public class BasketViewModel
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public List<BasketItemViewModel> Items { get; set; } = new List<BasketItemViewModel>();
     public string? BuyerId { get; set; }
 

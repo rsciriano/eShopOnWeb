@@ -27,7 +27,7 @@ public class OrderService : IOrderService
         _itemRepository = itemRepository;
     }
 
-    public async Task CreateOrderAsync(int basketId, Address shippingAddress)
+    public async Task CreateOrderAsync(string basketId, Address shippingAddress)
     {
         var basketSpec = new BasketWithItemsSpecification(basketId);
         var basket = await _basketRepository.FirstOrDefaultAsync(basketSpec);

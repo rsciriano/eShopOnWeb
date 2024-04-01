@@ -37,14 +37,14 @@ public class BasketService : IBasketService
         return basket;
     }
 
-    public async Task DeleteBasketAsync(int basketId)
+    public async Task DeleteBasketAsync(string basketId)
     {
         var basket = await _basketRepository.GetByIdAsync(basketId);
         Guard.Against.Null(basket, nameof(basket));
         await _basketRepository.DeleteAsync(basket);
     }
 
-    public async Task<Result<Basket>> SetQuantities(int basketId, Dictionary<string, int> quantities)
+    public async Task<Result<Basket>> SetQuantities(string basketId, Dictionary<string, int> quantities)
     {
         var basketSpec = new BasketWithItemsSpecification(basketId);
         var basket = await _basketRepository.FirstOrDefaultAsync(basketSpec);
@@ -52,9 +52,9 @@ public class BasketService : IBasketService
 
         foreach (var item in basket.Items)
         {
-            if (quantities.TryGetValue(item.Id.ToString(), out var quantity))
+            if (quantities.TryGetValue(item.CatalogItemId.ToString(), out var quantity))
             {
-                if (_logger != null) _logger.LogInformation($"Updating quantity of item ID:{item.Id} to {quantity}.");
+                if (_logger != null) _logger.LogInformation($"Updating quantity of item ID:{item.CatalogItemId} to {quantity}.");
                 item.SetQuantity(quantity);
             }
         }
@@ -79,7 +79,7 @@ public class BasketService : IBasketService
         {
             userBasket.AddItem(item.CatalogItemId, item.UnitPrice, item.Quantity);
         }
-        await _basketRepository.UpdateAsync(userBasket);
         await _basketRepository.DeleteAsync(anonymousBasket);
+        await _basketRepository.UpdateAsync(userBasket);
     }
 }

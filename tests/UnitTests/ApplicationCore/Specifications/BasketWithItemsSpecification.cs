@@ -9,7 +9,7 @@ namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Specifications;
 
 public class BasketWithItems
 {
-    private readonly int _testBasketId = 123;
+    private readonly string _testBasketId = "123";
     private readonly string _buyerId = "Test buyerId";
 
     [Fact]
@@ -26,7 +26,7 @@ public class BasketWithItems
     [Fact]
     public void MatchesNoBasketsIfBasketIdNotPresent()
     {
-        int badBasketId = -1;
+        string badBasketId = "-1";
         var spec = new BasketWithItemsSpecification(badBasketId);
 
         var result = spec.Evaluate(GetTestBasketCollection()).Any();
@@ -59,9 +59,9 @@ public class BasketWithItems
     public List<Basket> GetTestBasketCollection()
     {
         var basket1Mock = Substitute.For<Basket>(_buyerId);
-        basket1Mock.Id.Returns(1);
+        basket1Mock.Id.Returns(_buyerId);
         var basket2Mock = Substitute.For<Basket>(_buyerId);
-        basket2Mock.Id.Returns(2);
+        basket2Mock.Id.Returns(_buyerId);
         var basket3Mock = Substitute.For<Basket>(_buyerId);
         basket3Mock.Id.Returns(_testBasketId);
 

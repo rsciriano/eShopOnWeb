@@ -61,7 +61,7 @@ public class BasketViewModelService : IBasketViewModelService
 
             var basketItemViewModel = new BasketItemViewModel
             {
-                Id = basketItem.Id,
+                Id = basketItem.CatalogItemId,
                 UnitPrice = basketItem.UnitPrice,
                 Quantity = basketItem.Quantity,
                 CatalogItemId = basketItem.CatalogItemId,

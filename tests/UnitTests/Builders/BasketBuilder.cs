@@ -8,7 +8,7 @@ public class BasketBuilder
     private Basket _basket;
     public string BasketBuyerId => "testbuyerId@test.com";
 
-    public int BasketId => 1;
+    public string BasketId => "1";
 
     public BasketBuilder()
     {

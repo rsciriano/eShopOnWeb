@@ -16,12 +16,20 @@ public class CatalogContext : DbContext
     public DbSet<CatalogBrand> CatalogBrands { get; set; }
     public DbSet<CatalogType> CatalogTypes { get; set; }
     public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderItem> OrderItems { get; set; }
-    public DbSet<BasketItem> BasketItems { get; set; }
+    //public DbSet<OrderItem> OrderItems { get; set; }
+    //public DbSet<BasketItem> BasketItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        if (Database.IsCosmos())
+        {
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetAssembly(typeof(CosmosDb.Config.CatalogItemConfiguration))!);
+        }
+        else
+        {
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }

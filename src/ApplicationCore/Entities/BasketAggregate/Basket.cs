@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ardalis.GuardClauses;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 
-public class Basket : BaseEntity, IAggregateRoot
+public class Basket : BaseEntity<string>, IAggregateRoot
 {
     public string BuyerId { get; private set; }
     private readonly List<BasketItem> _items = new List<BasketItem>();
@@ -16,6 +17,7 @@ public class Basket : BaseEntity, IAggregateRoot
 
     public Basket(string buyerId)
     {
+        Id = buyerId;
         BuyerId = buyerId;
     }
 

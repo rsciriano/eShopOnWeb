@@ -12,6 +12,18 @@ COPY . .
 #RUN dotnet restore "./PublicApi/PublicApi.csproj"
 #COPY . .
 WORKDIR "/app/src/PublicApi"
+#https://github.com/NuGet/Home/issues/13062
+#ENV DOTNET_NUGET_SIGNATURE_VERIFICATION=false
+#ENV DOTNET_USE_POLLING_FILE_WATCHER=false
+#ENV NUGET_XMLDOC_MODE=skip
+#ENV NUGET_CERT_REVOCATION_MODE=offline
+#RUN \
+#    --mount=type=cache,id=nugethttpcache,sharing=locked,target=/root/.local/share/NuGet/http-cache \
+#    --mount=type=cache,id=nugetglobalpackages,sharing=locked,target=/root/.nuget/packages/ \
+#    --mount=type=cache,id=nugettemp,sharing=locked,target=/Temp/NuGet \
+#    --mount=type=cache,id=nugetplugins-cache,sharing=locked,target=/root/.local/share/NuGet/plugin-cache \
+#    dotnet restore
+
 RUN dotnet restore
 
 RUN dotnet build "./PublicApi.csproj" -c Release -o /app/build

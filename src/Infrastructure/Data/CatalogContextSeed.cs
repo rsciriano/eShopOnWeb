@@ -20,8 +20,12 @@ public class CatalogContextSeed
             {
                 catalogContext.Database.Migrate();
             }
+            else if (catalogContext.Database.IsCosmos())
+            {
+                await catalogContext.Database.EnsureCreatedAsync();
+            }
 
-            if (!await catalogContext.CatalogBrands.AnyAsync())
+            if (await catalogContext.CatalogBrands.CountAsync() == 0)
             {
                 await catalogContext.CatalogBrands.AddRangeAsync(
                     GetPreconfiguredCatalogBrands());
@@ -29,7 +33,7 @@ public class CatalogContextSeed
                 await catalogContext.SaveChangesAsync();
             }
 
-            if (!await catalogContext.CatalogTypes.AnyAsync())
+            if (await catalogContext.CatalogTypes.CountAsync() == 0)
             {
                 await catalogContext.CatalogTypes.AddRangeAsync(
                     GetPreconfiguredCatalogTypes());
@@ -37,7 +41,7 @@ public class CatalogContextSeed
                 await catalogContext.SaveChangesAsync();
             }
 
-            if (!await catalogContext.CatalogItems.AnyAsync())
+            if (await catalogContext.CatalogItems.CountAsync() == 0)
             {
                 await catalogContext.CatalogItems.AddRangeAsync(
                     GetPreconfiguredItems());
