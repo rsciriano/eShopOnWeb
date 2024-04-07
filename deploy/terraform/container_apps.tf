@@ -67,6 +67,10 @@ module "container_apps" {
                 secret_name          = "insights-connection"
             },
             {
+                name                 = "AZURE_KEY_VAULT_ENDPOINT"
+                value                = azurerm_key_vault.kv.vault_uri
+            },
+            {
                 name                 = "ASPNETCORE_URLS"
                 value                = "http://+:8080"
             },
