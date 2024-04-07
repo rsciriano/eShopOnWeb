@@ -47,9 +47,7 @@ module "container_apps" {
           target_port         = 80
           transport           = "http"
           traffic_weight      = [{
-              label               = "blue"
               latest_revision     = true
-              revision_suffix     = "blue"
               percentage          = 100
           }]
       }
