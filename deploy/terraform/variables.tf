@@ -188,3 +188,8 @@ variable "container_access_type" {
   type        = string
   default     = "private"
 }
+
+variable "database_engine" {
+  type        = string
+  default     = "CosmosDb"  
+}
