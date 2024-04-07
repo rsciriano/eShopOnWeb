@@ -29,7 +29,7 @@ resource "azurerm_cosmosdb_sql_database" "db" {
   for_each            = var.databases
   name                = each.key
   resource_group_name = var.resource_group_name
-  account_name        = azurerm_cosmosdb_account.account
+  account_name        = azurerm_cosmosdb_account.account.name
   throughput          = each.value.scale != null && each.value.scale.autoscale ? null : each.value.throughput
 
   dynamic "autoscale_settings" {
