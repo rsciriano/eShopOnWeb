@@ -36,12 +36,12 @@ locals {
   db_connection_strings = {
     Catalog = (
       var.database_engine == "SqlServer" ? module.mssql.conection_strings.Catalog
-      : var.database_engine == "SqlServer" ? module.cosmosdb.conection_string
+      : var.database_engine == "CosmosDb" ? module.cosmosdb.conection_string
       :"")
     
     Identity = (
       var.database_engine == "SqlServer" ? module.mssql.conection_strings.Identity
-      : var.database_engine == "SqlServer" ? module.cosmosdb.conection_string
+      : var.database_engine == "CosmosDb" ? module.cosmosdb.conection_string
       :"")
   }
 }
