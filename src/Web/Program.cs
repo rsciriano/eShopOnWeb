@@ -33,11 +33,13 @@ Microsoft.eShopWeb.Infrastructure.Dependencies.ConfigureServices(
     builder.Services, 
     builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker");
 
+/*
 if (builder.Environment.IsProduction())
 {
     var credential = new ChainedTokenCredential(new AzureDeveloperCliCredential(), new DefaultAzureCredential());
     builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration["AZURE_KEY_VAULT_ENDPOINT"] ?? ""), credential);
 }
+*/
 
 builder.Services.AddCookieSettings();
 
