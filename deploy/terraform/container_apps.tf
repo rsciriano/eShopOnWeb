@@ -1,9 +1,8 @@
 module "container_apps" {
-  depends_on = var.database_engine == "SqlServer" ? [
-    module.mssql
-  ] : var.database_engine == "CosmosDb" ? [
+  depends_on                       = [
+    module.mssql, 
     module.cosmosdb
-  ] : []
+  ]
   source                           = "./modules/container_apps"
   managed_environment_name         = "${var.resource_prefix != "" ? var.resource_prefix : random_string.resource_prefix.result}${var.managed_environment_name}"
   location                         = var.location
