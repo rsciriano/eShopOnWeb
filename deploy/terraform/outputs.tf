@@ -7,6 +7,6 @@ output "log_analytics_workspace_id" {
 }
 
 output "mssql_conection_strings" {
-  value = module.mssql.conection_strings
+  value = module.mssql.length > 0 ? module.mssql[0].conection_strings : {}
   sensitive = true
 }
