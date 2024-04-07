@@ -31,7 +31,11 @@ resource "azurerm_cosmosdb_sql_database" "db" {
   resource_group_name = var.resource_group_name
   account_name        = azurerm_cosmosdb_account.account
   throughput          = each.value.scale != null && each.value.scale.autoscale ? null : each.value.throughput
-  autoscale_settings  = each.value.scale != null && each.value.scale.autoscale ? {
-    max_throughput    = each.value.scale.max_throughput
-  } : null
+
+  dynamic "autoscale_settings" {
+    for_each = each.value.scale != null && each.value.scale.autoscale ? [each.value.scale.max_throughput] : []
+    content {
+      max_throughput = each.value
+    }
+  }
 }
