@@ -44,7 +44,7 @@ module "container_apps" {
       revision_mode       = "Single"
       ingress             = {
           external_enabled    = true
-          target_port         = 80
+          target_port         = 8080
           transport           = "http"
           traffic_weight      = [{
               latest_revision     = true
