@@ -15,6 +15,14 @@ resource "azurerm_cosmosdb_account" "account" {
   enable_free_tier    = true
   kind                = "GlobalDocumentDB"
   location            = var.location
+  
+  
+  dynamic "capabilities" {
+    for_each = var.serverless ? [1] : []
+    content {
+      name  = "EnableServerless"
+    }
+  }
   geo_location {
     location          = var.location
     failover_priority = 0
@@ -30,10 +38,10 @@ resource "azurerm_cosmosdb_sql_database" "db" {
   name                = each.key
   resource_group_name = var.resource_group_name
   account_name        = azurerm_cosmosdb_account.account.name
-  throughput          = each.value.scale != null && each.value.scale.autoscale ? null : each.value.throughput
+  throughput          = var.serverless == false && each.value.scale != null && each.value.scale.autoscale ? null : each.value.throughput
 
   dynamic "autoscale_settings" {
-    for_each = each.value.scale != null && each.value.scale.autoscale ? [each.value.scale.max_throughput] : []
+    for_each = var.serverless == false && each.value.scale != null && each.value.scale.autoscale ? [each.value.scale.max_throughput] : []
     content {
       max_throughput = autoscale_settings.value
     }

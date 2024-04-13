@@ -1,10 +1,11 @@
 module "cosmosdb" {
-  count                            = var.database_engine == "CosmosDb" ? 1 : 0
-  source                           = "./modules/cosmosdb"
-  name                             = "${var.resource_prefix}-cosmos"
-  location                         = var.location
-  resource_group_name              = azurerm_resource_group.rg.name
-  tags                             = var.tags
+  count                   = var.database_engine == "CosmosDb" ? 1 : 0
+  source                  = "./modules/cosmosdb"
+  name                    = "${var.resource_prefix}-cosmos"
+  location                = var.location
+  resource_group_name     = azurerm_resource_group.rg.name
+  tags                    = var.tags
+  serverless              = true
   databases = {
     "Catalog" = {
       scale = {

@@ -20,6 +20,12 @@ variable "location" {
   type        = string
 }
 
+variable "serverless" {
+  description = "EnableServerless feature"
+  type        = bool
+  default     = false
+}
+
 variable "databases" {
   type        = map(object({
     scale     = object({
