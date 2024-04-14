@@ -17,12 +17,12 @@ resource "azurerm_cosmosdb_account" "account" {
   location            = var.location
   
   
-  dynamic "capabilities" {
-    for_each = var.serverless == true ? [1] : []
-    content {
-      name  = "EnableServerless"
-    }
-  }
+  #dynamic "capabilities" {
+  #  for_each = var.serverless == true ? [1] : []
+  #  content {
+  #    name  = "EnableServerless"
+  #  }
+  #}
   geo_location {
     location          = var.location
     failover_priority = 0
