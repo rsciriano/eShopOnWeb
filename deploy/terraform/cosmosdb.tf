@@ -5,12 +5,12 @@ module "cosmosdb" {
   location                = var.location
   resource_group_name     = azurerm_resource_group.rg.name
   tags                    = var.tags
-  serverless              = true
+  serverless              = false
   databases = {
     "Catalog" = {
       scale = {
         autoscale      = true
-        max_throughput = 1000
+        max_throughput = 7000
       }
     }
     "Identity" = {
