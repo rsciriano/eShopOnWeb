@@ -41,7 +41,7 @@ resource "azurerm_cosmosdb_sql_database" "db" {
   throughput          = var.serverless == false && each.value.scale != null && each.value.scale.autoscale ? null : each.value.scale.throughput
 
   dynamic "autoscale_settings" {
-    for_each = var.serverless == false && each.value.scale != null && each.value.scale.autoscale ? [each.value.scale.scale.max_throughput] : []
+    for_each = var.serverless == false && each.value.scale != null && each.value.scale.autoscale ? [each.value.scale.max_throughput] : []
     content {
       max_throughput = autoscale_settings.value
     }
