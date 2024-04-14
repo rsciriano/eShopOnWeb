@@ -18,7 +18,7 @@ resource "azurerm_cosmosdb_account" "account" {
   
   
   dynamic "capabilities" {
-    for_each = var.serverless ? [1] : []
+    for_each = var.serverless == true ? [1] : []
     content {
       name  = "EnableServerless"
     }
