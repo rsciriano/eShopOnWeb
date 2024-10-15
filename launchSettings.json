@@ -7,7 +7,7 @@
       "composeLaunchServiceName": "eshopwebmvc",
       "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}",
       "serviceActions": {
-        "eshopwebmvc": "StartDebugging",
+        "eshopwebmvc": "StartDebugging"
       }
     }
   }

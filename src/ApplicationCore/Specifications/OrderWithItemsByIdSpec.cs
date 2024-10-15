@@ -1,11 +1,12 @@
-﻿using Ardalis.Specification;
+﻿using System;
+using Ardalis.Specification;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Specifications;
 
 public class OrderWithItemsByIdSpec : Specification<Order>
 {
-    public OrderWithItemsByIdSpec(string orderId)
+    public OrderWithItemsByIdSpec(Guid orderId)
     {
         Query
             .Where(order => order.Id == orderId)
@@ -13,7 +14,7 @@ public class OrderWithItemsByIdSpec : Specification<Order>
             .ThenInclude(i => i.ItemOrdered);
     }
 
-    public OrderWithItemsByIdSpec(string orderId, string buyerId)
+    public OrderWithItemsByIdSpec(Guid orderId, string buyerId)
     {
         Query
             .Where(order => order.Id == orderId && order.BuyerId == buyerId)

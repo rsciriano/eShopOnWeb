@@ -8,6 +8,10 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 {
     public void Configure(EntityTypeBuilder<OrderItem> builder)
     {
+        builder.ToTable("OrderItems");
+
+        builder.Property<int>("Id");
+
         builder.OwnsOne(i => i.ItemOrdered, io =>
         {
             io.WithOwner();

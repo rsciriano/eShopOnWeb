@@ -1,23 +1,22 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
+using BlazorAdmin;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.eShopWeb.Infrastructure.Data;
+using Microsoft.eShopWeb.Infrastructure.Identity;
+using Microsoft.Extensions.Hosting;
 using Xunit;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers;
 
 [Collection("Sequential")]
-public class AccountControllerSignIn : IClassFixture<TestApplication>
+public class AccountControllerSignIn : IClassFixture<TestApplication>, IAsyncLifetime
 {
-    public AccountControllerSignIn(TestApplication factory)
-    {
-        Client = factory.CreateClient(new WebApplicationFactoryClientOptions
-        {
-            AllowAutoRedirect = false
-        });
-    }
-
-    public HttpClient Client { get; }
-
     [Fact]
     public async Task ReturnsSignInScreenOnGet()
     {
@@ -109,5 +108,55 @@ public class AccountControllerSignIn : IClassFixture<TestApplication>
         var stringProfileResponse2 = await profileResponse2.Content.ReadAsStringAsync();
         Assert.Contains("03656565", stringProfileResponse2);
 
+    }
+
+    
+    private readonly TestApplication _testApplication;
+    public HttpClient Client { get; }
+
+    public AccountControllerSignIn(TestApplication testApplication)
+    {
+        _testApplication = testApplication;
+
+        Client = testApplication.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
+    }
+
+    public async Task InitializeAsync()
+    {
+        var logger = _testApplication.Services.GetRequiredService<ILoggerFactory>().CreateLogger<AccountControllerSignIn>();
+        var configuration = _testApplication.Services.GetRequiredService<IConfiguration>();
+
+        using (var scope = _testApplication.Services.CreateScope())
+        {
+            var scopedProvider = scope.ServiceProvider;
+            try
+            {
+                var catalogContext = scopedProvider.GetRequiredService<CatalogContext>();
+                await CatalogContextSeed.SeedAsync(catalogContext, logger);
+
+                var userManager = scopedProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = scopedProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                IdentityDbContext<ApplicationUser, IdentityRole, string> identityContext = configuration.GetDatabaseEngine() switch
+                {
+                    DatabaseEngines.CosmosDb => scopedProvider.GetRequiredService<AppIdentityCosmosDbContext>(),
+                    _ => scopedProvider.GetRequiredService<AppIdentityDbContext>()
+                };
+                await AppIdentityDbContextSeed.SeedAsync(identityContext, userManager, roleManager);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred seeding the DB.");
+            }
+        }
+
+    }
+
+    public Task DisposeAsync()
+    {
+        return Task.CompletedTask;
     }
 }

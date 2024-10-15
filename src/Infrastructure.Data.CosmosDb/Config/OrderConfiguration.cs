@@ -19,8 +19,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(e => e.Id)
             .ToJsonProperty("id")
-            .HasConversion<string>()
-            //.HasValueGenerator<AutoIncValueGenerator>();
             .HasValueGenerator<GuidValueGenerator>();
 
         builder.OwnsMany(e => e.OrderItems);

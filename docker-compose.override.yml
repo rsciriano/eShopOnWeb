@@ -4,17 +4,20 @@ services:
    environment:
      - ASPNETCORE_ENVIRONMENT=Docker
      - ASPNETCORE_URLS=http://+:8080
+     - DatabaseEngine=SqlServer
+     - ConnectionStrings__CatalogConnection=Server=sqlserver;User Id=sa;Password=@someThingComplicated1234;TrustServerCertificate=true;Initial Catalog=Microsoft.eShopOnWeb.CatalogDb;
+     - ConnectionStrings__IdentityConnection=Server=sqlserver;User Id=sa;Password=@someThingComplicated1234;TrustServerCertificate=true;Initial Catalog=Microsoft.eShopOnWeb.Identity;
    ports:
      - "5106:8080"
    volumes:
      - ~/.aspnet/https:/root/.aspnet/https:ro
      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
- eshoppublicapi:
-   environment:
-     - ASPNETCORE_ENVIRONMENT=Docker
-     - ASPNETCORE_URLS=http://+:8080
-   ports:
-     - "5200:8080"
-   volumes:
-     - ~/.aspnet/https:/root/.aspnet/https:ro
-     - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+ #eshoppublicapi:
+ #  environment:
+ #    - ASPNETCORE_ENVIRONMENT=Docker
+ #    - ASPNETCORE_URLS=http://+:8080
+ #  ports:
+ #    - "5200:8080"
+ #  volumes:
+ #    - ~/.aspnet/https:/root/.aspnet/https:ro
+ #    - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro

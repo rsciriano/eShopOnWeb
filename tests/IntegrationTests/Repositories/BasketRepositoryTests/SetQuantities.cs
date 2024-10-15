@@ -33,7 +33,7 @@ public class SetQuantities
         await _basketRepository.AddAsync(basket);
         _catalogContext.SaveChanges();
 
-        await basketService.SetQuantities(BasketBuilder.BasketId, new Dictionary<string, int>() { { BasketBuilder.BasketId.ToString(), 0 } });
+        await basketService.SetQuantities(basket.Id, new Dictionary<string, int>() { { "2", 0 } });
 
         Assert.Equal(0, basket.Items.Count);
     }

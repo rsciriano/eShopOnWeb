@@ -61,6 +61,8 @@ public class TestApplication : WebApplicationFactory<IBasketViewModelService>, I
 
             _catalogConnectionString = _cosmosDbContainer.GetConnectionString();
             _identityConnectionString = _cosmosDbContainer.GetConnectionString();
+
+
         }
 
     }
@@ -79,7 +81,6 @@ public class TestApplication : WebApplicationFactory<IBasketViewModelService>, I
                 new KeyValuePair<string, string?>("ConnectionStrings:IdentityConnection", _identityConnectionString),
             });
         });
-        /*
         // Add mock/test services to the builder here
         builder.ConfigureServices(services =>
         {
@@ -103,10 +104,11 @@ public class TestApplication : WebApplicationFactory<IBasketViewModelService>, I
                 return GetDbContextOptions<AppIdentityDbContext>(_databaseEngine, "Identity");
             });
         });
-        */
+
 
         return base.CreateHost(builder);
     }
+
 
     protected async Task CreateSqlServerDatabaseAsync(string databaseName)
     {

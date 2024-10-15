@@ -23,8 +23,7 @@ public partial class InitialModel : Migration
             name: "Baskets",
             columns: table => new
             {
-                Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                Id = table.Column<string>(type: "varchar(128)", nullable: false),
                 BuyerId = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
             },
             constraints: table =>
@@ -60,8 +59,7 @@ public partial class InitialModel : Migration
             name: "Orders",
             columns: table => new
             {
-                Id = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                 BuyerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 OrderDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                 ShipToAddress_Street = table.Column<string>(type: "nvarchar(180)", maxLength: 180, nullable: true),
@@ -84,7 +82,7 @@ public partial class InitialModel : Migration
                 UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                 Quantity = table.Column<int>(type: "int", nullable: false),
                 CatalogItemId = table.Column<int>(type: "int", nullable: false),
-                BasketId = table.Column<int>(type: "int", nullable: false)
+                BasketId = table.Column<string>(type: "varchar(128)", nullable: false)
             },
             constraints: table =>
             {
@@ -137,7 +135,7 @@ public partial class InitialModel : Migration
                 ItemOrdered_PictureUri = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 UnitPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                 Units = table.Column<int>(type: "int", nullable: false),
-                OrderId = table.Column<int>(type: "int", nullable: true)
+                OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
             },
             constraints: table =>
             {

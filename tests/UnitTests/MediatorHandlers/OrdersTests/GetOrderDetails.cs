@@ -28,7 +28,7 @@ public class GetOrderDetails
     [Fact]
     public async Task NotBeNullIfOrderExists()
     {
-        var request = new eShopWeb.Web.Features.OrderDetails.GetOrderDetails("SomeUserName", "-1");
+        var request = new eShopWeb.Web.Features.OrderDetails.GetOrderDetails("SomeUserName", Guid.NewGuid());
 
         var handler = new GetOrderDetailsHandler(_mockOrderRepository);
 

@@ -22,17 +22,16 @@ public class BasketBuilder
 
     public Basket WithNoItems()
     {
-        var basketMock = Substitute.For<Basket>(BasketBuyerId);
-        basketMock.Id.Returns(BasketId);
+        var basket = new Basket(BasketBuyerId);
 
-        _basket = basketMock;
+        _basket = basket;
         return _basket;
     }
 
     public Basket WithOneBasketItem()
     {
-        var basketMock = Substitute.For<Basket>(BasketBuyerId);
-        _basket = basketMock;
+        var basket = new Basket(BasketBuyerId);
+        _basket = basket;
         _basket.AddItem(2, 3.40m, 4);
         return _basket;
     }

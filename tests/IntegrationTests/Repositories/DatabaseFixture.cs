@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
+using Azure;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.Infrastructure.Data;
-using NSubstitute.Routing.Handlers;
 using Testcontainers.CosmosDb;
-using Testcontainers.SqlEdge;
+using Testcontainers.MsSql;
 using Xunit;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories;
@@ -18,9 +17,39 @@ public class DatabaseFixture : IAsyncLifetime
 {
     private DbContextOptions<CatalogContext> _dbOptions;
     private CosmosDbContainer _cosmosDbContainer;
-    private SqlEdgeContainer _sqlEdgeContainer;
+    private MsSqlContainer _sqlContainer;
 
-    private const string DEFAULT_DATABASE_NAME = "IntegrationTests"; 
+    private const string DEFAULT_DATABASE_NAME = "IntegrationTests";
+
+    private sealed class WaitUntil : IWaitUntil
+    {
+        /// <inheritdoc />
+        public async Task<bool> UntilAsync(IContainer container)
+        {
+            // CosmosDB's preconfigured HTTP client will redirect the request to the container.
+            const string requestUri = "https://localhost:/_explorer/Index.html";
+
+            var httpClient = ((CosmosDbContainer)container).HttpClient;
+
+            try
+            {
+                using var httpResponse = await httpClient.GetAsync(requestUri)
+                    .ConfigureAwait(false);
+
+                return httpResponse.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"CosmosDb: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                httpClient.Dispose();
+            }
+        }
+    }
+
 
     public async Task<TContext> CreateDbContextAsync<TContext>(string databaseEngine)
         where TContext : DbContext
@@ -36,17 +65,14 @@ public class DatabaseFixture : IAsyncLifetime
         }
         else if (databaseEngine == DatabaseEngines.SqlServer)
         {
-            _sqlEdgeContainer = new SqlEdgeBuilder()
-              .WithImage("mcr.microsoft.com/azure-sql-edge:1.0.7")
-              .WithName("eShopOnWeb-IntegrationTests")
-              .WithEnvironment("AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE", "127.0.0.1")
-              .WithReuse(true)
+            _sqlContainer = new MsSqlBuilder()
+              .WithPortBinding(56300, MsSqlBuilder.MsSqlPort)
               .Build();
-            await _sqlEdgeContainer.StartAsync();
+            await _sqlContainer.StartAsync();
 
             await CreateSqlServerDatabase(DEFAULT_DATABASE_NAME);
 
-            var connectionString = new SqlConnectionStringBuilder(_sqlEdgeContainer.GetConnectionString());
+            var connectionString = new SqlConnectionStringBuilder(_sqlContainer.GetConnectionString());
             connectionString.InitialCatalog = DEFAULT_DATABASE_NAME;
 
             var dbOptions = new DbContextOptionsBuilder<TContext>()
@@ -63,8 +89,11 @@ public class DatabaseFixture : IAsyncLifetime
         else if (databaseEngine == DatabaseEngines.CosmosDb)
         {
             _cosmosDbContainer = new CosmosDbBuilder()
-              .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
+              //.WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
+              .WithWaitStrategy(Wait.ForUnixContainer().AddCustomWaitStrategy(new WaitUntil()))
               .Build();
+            
+
             await _cosmosDbContainer.StartAsync();
 
             var dbOptions = new DbContextOptionsBuilder<TContext>()
@@ -72,15 +101,18 @@ public class DatabaseFixture : IAsyncLifetime
                     connectionString: _cosmosDbContainer.GetConnectionString(), 
                     databaseName: DEFAULT_DATABASE_NAME,
                     cfg => cfg
-                        .HttpClientFactory(() => new HttpClient(new HttpClientHandler()
+                        /*.HttpClientFactory(() => new HttpClient(new HttpClientHandler()
                         {
                             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                        }))
+                        }))*/
+                        .HttpClientFactory(() => _cosmosDbContainer.HttpClient)
                         .ConnectionMode(Azure.Cosmos.ConnectionMode.Gateway)
                     )
                 .Options;
 
-            return (TContext)Activator.CreateInstance(typeof(TContext), dbOptions);
+            var dbContext = (TContext)Activator.CreateInstance(typeof(TContext), dbOptions);
+            await dbContext.Database.EnsureCreatedAsync();
+            return dbContext;
 
         }
         else
@@ -93,7 +125,7 @@ public class DatabaseFixture : IAsyncLifetime
 
     protected async Task CreateSqlServerDatabase(string databaseName)
     {
-        using var connection = new SqlConnection(_sqlEdgeContainer.GetConnectionString());
+        using var connection = new SqlConnection(_sqlContainer.GetConnectionString());
 
         // TODO: Add your database migration here.
         using var command = connection.CreateCommand();
@@ -114,7 +146,7 @@ public class DatabaseFixture : IAsyncLifetime
     public async Task DisposeAsync()
     {
         if (_cosmosDbContainer is not null) await _cosmosDbContainer.DisposeAsync();
-        if (_sqlEdgeContainer is not null) await _sqlEdgeContainer.DisposeAsync();
+        if (_sqlContainer is not null) await _sqlContainer.DisposeAsync();
 
     }
 }

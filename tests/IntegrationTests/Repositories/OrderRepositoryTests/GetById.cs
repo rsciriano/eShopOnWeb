@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
@@ -41,7 +42,7 @@ public class GetById : IClassFixture<DatabaseFixture>
         var existingOrder = OrderBuilder.WithDefaultValues();
         _catalogContext.Orders.Add(existingOrder);
         _catalogContext.SaveChanges();
-        string orderId = existingOrder.Id;
+        Guid orderId = existingOrder.Id;
         _output.WriteLine($"OrderId: {orderId}");
 
         var orderFromRepo = await _orderRepository.GetByIdAsync(orderId);

@@ -6,9 +6,9 @@ namespace Microsoft.eShopWeb.Web.Features.OrderDetails;
 public class GetOrderDetails : IRequest<OrderDetailViewModel>
 {
     public string UserName { get; set; }
-    public string OrderId { get; set; }
+    public Guid OrderId { get; set; }
 
-    public GetOrderDetails(string userName, string orderId)
+    public GetOrderDetails(string userName, Guid orderId)
     {
         UserName = userName;
         OrderId = orderId;

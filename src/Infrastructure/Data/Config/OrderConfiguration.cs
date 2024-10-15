@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
@@ -11,6 +12,8 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         var navigation = builder.Metadata.FindNavigation(nameof(Order.OrderItems));
 
         navigation?.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        builder.HasKey(e => e.Id);
 
         builder.Property(b => b.BuyerId)
             .IsRequired()
