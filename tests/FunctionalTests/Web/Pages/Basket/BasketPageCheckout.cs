@@ -3,8 +3,8 @@ using Xunit;
 
 namespace Microsoft.eShopWeb.FunctionalTests.Web.Pages.Basket;
 
-[Collection("Sequential")]
-public class BasketPageCheckout : IClassFixture<TestApplication>
+[Collection("Database collection")]
+public class BasketPageCheckout
 {
     public BasketPageCheckout(TestApplication factory)
     {

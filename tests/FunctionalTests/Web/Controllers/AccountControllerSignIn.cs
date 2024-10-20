@@ -14,8 +14,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers;
 
-[Collection("Sequential")]
-public class AccountControllerSignIn : IClassFixture<TestApplication>, IAsyncLifetime
+[Collection("Database collection")]
+public class AccountControllerSignIn : IAsyncLifetime
 {
     [Fact]
     public async Task ReturnsSignInScreenOnGet()

@@ -3,8 +3,8 @@ using Xunit;
 
 namespace Microsoft.eShopWeb.FunctionalTests.WebRazorPages;
 
-[Collection("Sequential")]
-public class HomePageOnGet : IClassFixture<TestApplication>
+[Collection("Database collection")]
+public class HomePageOnGet
 {
     public HomePageOnGet(TestApplication factory)
     {

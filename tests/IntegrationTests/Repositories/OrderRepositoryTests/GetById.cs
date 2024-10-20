@@ -10,7 +10,8 @@ using Xunit.Abstractions;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests;
 
-public class GetById : IClassFixture<DatabaseFixture>
+[Collection("Database collection")]
+public class GetById
 {
     private CatalogContext _catalogContext;
     private EfRepository<Order> _orderRepository;

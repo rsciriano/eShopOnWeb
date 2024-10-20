@@ -1,4 +1,8 @@
 ﻿using System;
+using Azure;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Configurations;
+using DotNet.Testcontainers.Containers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -17,7 +21,7 @@ using Xunit;
 
 namespace Microsoft.eShopWeb.FunctionalTests.Web;
 
-public class TestApplication : WebApplicationFactory<IBasketViewModelService>, IAsyncLifetime
+public class TestApplication : WebApplicationFactory<IBasketViewModelService>, IAsyncLifetime, IDisposable
 {
     private readonly string _environment = "Development";
     private SqlEdgeContainer _sqlEdgeContainer;
@@ -25,6 +29,36 @@ public class TestApplication : WebApplicationFactory<IBasketViewModelService>, I
     private string _identityConnectionString;
     private string _databaseEngine = DatabaseEngines.CosmosDb;
     private CosmosDbContainer _cosmosDbContainer;
+
+    private sealed class WaitUntil : IWaitUntil
+    {
+        /// <inheritdoc />
+        public async Task<bool> UntilAsync(IContainer container)
+        {
+            // CosmosDB's preconfigured HTTP client will redirect the request to the container.
+            const string requestUri = "https://localhost:/_explorer/Index.html";
+
+            var httpClient = ((CosmosDbContainer)container).HttpClient;
+
+            try
+            {
+                using var httpResponse = await httpClient.GetAsync(requestUri)
+                    .ConfigureAwait(false);
+
+                return httpResponse.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"CosmosDb: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                httpClient.Dispose();
+            }
+        }
+    }
+
 
     public async Task InitializeAsync()
     {
@@ -51,12 +85,13 @@ public class TestApplication : WebApplicationFactory<IBasketViewModelService>, I
         else if (_databaseEngine == DatabaseEngines.CosmosDb)
         {
             _cosmosDbContainer = new CosmosDbBuilder()
-              .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
-              .WithName("eShopOnWeb-FunctionalTests")
-              .WithEnvironment("AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE","127.0.0.1")
-              .WithPortBinding(8081)
-              .WithReuse(true)
-              .Build();
+            //.WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
+            //.WithName("eShopOnWeb-FunctionalTests")
+            .WithEnvironment("AZURE_COSMOS_EMULATOR_IP_ADDRESS_OVERRIDE","127.0.0.1")
+            //.WithPortBinding(8081)
+            //.WithReuse(true)
+            .WithWaitStrategy(Wait.ForUnixContainer().AddCustomWaitStrategy(new WaitUntil()))
+            .Build();
             await _cosmosDbContainer.StartAsync();
 
             _catalogConnectionString = _cosmosDbContainer.GetConnectionString();
@@ -86,7 +121,7 @@ public class TestApplication : WebApplicationFactory<IBasketViewModelService>, I
         {
             var descriptors = services.Where(d =>
                 d.ServiceType == typeof(DbContextOptions<CatalogContext>) ||
-                d.ServiceType == typeof(DbContextOptions<AppIdentityDbContext>))
+                d.ServiceType == typeof(DbContextOptions<AppIdentityCosmosDbContext>))
             .ToList();
 
             foreach (var descriptor in descriptors)
@@ -101,7 +136,7 @@ public class TestApplication : WebApplicationFactory<IBasketViewModelService>, I
             });
             services.AddScoped(sp =>
             {
-                return GetDbContextOptions<AppIdentityDbContext>(_databaseEngine, "Identity");
+                return GetDbContextOptions<AppIdentityCosmosDbContext>(_databaseEngine, "Identity");
             });
         });
 
@@ -158,10 +193,7 @@ public class TestApplication : WebApplicationFactory<IBasketViewModelService>, I
                     connectionString: _cosmosDbContainer.GetConnectionString(),
                     databaseName: databaseName,
                     cfg => cfg
-                        .HttpClientFactory(() => new HttpClient(new HttpClientHandler()
-                        {
-                            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                        }))
+                        .HttpClientFactory(() => _cosmosDbContainer.HttpClient)
                         .ConnectionMode(Azure.Cosmos.ConnectionMode.Gateway)
                     )
                 .Options;

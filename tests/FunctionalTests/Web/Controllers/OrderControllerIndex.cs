@@ -6,8 +6,8 @@ using Xunit;
 
 namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers;
 
-[Collection("Sequential")]
-public class OrderIndexOnGet : IClassFixture<TestApplication>
+[Collection("Database collection")]
+public class OrderIndexOnGet
 {
     public OrderIndexOnGet(TestApplication factory)
     {

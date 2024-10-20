@@ -11,7 +11,8 @@ using Xunit;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests;
 
-public class GetByIdWithItemsAsync: IClassFixture<DatabaseFixture>
+[Collection("Database collection")]
+public class GetByIdWithItemsAsync
 {
     private CatalogContext _catalogContext;
     private EfRepository<Order> _orderRepository;
